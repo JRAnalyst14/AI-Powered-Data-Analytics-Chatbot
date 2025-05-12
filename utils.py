@@ -274,7 +274,51 @@ def generate_plot_interactive(user_input: str, df: pd.DataFrame) -> dict | str:
             else:
                 return "❓ Pie chart requires a categorical column."
 
+
+        elif "line plot" in input_lower or "lineplot" in input_lower:
+            if len(cols) == 2:
+                fig = px.line(df, x=cols[0], y=cols[1], template=PLOTLY_TEMPLATE)
+                message = f"✅ Line Plot of `{cols[0]}` vs `{cols[1]}`"
+            else:
+                return "❓ Line plot needs two columns."
+
         # === SEABORN / MATPLOTLIB STATIC ===
+
+        elif "barplot" in input_lower and not "horizontal" in input_lower:
+            if len(cols) == 2:
+                plt.figure(figsize=(8, 6))
+                sns.barplot(x=df[cols[0]], y=df[cols[1]])
+                plt.title(f"Barplot of {cols[1]} by {cols[0]}")
+                static_plot_path = os.path.join(TEMP_PLOT_DIR, f"barplot_{uuid.uuid4().hex}.png")
+                plt.savefig(static_plot_path)
+                plt.close()
+                base64_img = encode_image_to_base64(static_plot_path)
+                return {"type": "static_base64", 
+                        "image": base64_img, 
+                        "format": "png", 
+                        "message": f"✅ Barplot of `{cols[1]}` by `{cols[0]}`"}
+            else:
+                return "❓ Barplot needs two columns: categorical and numerical."
+        
+        elif "horizontal bar" in input_lower:
+            if len(cols) == 2:
+                plt.figure(figsize=(8, 6))
+                sns.barplot(y=df[cols[0]], x=df[cols[1]])
+                plt.title(f"Horizontal Bar Plot of {cols[0]} by {cols[1]}")
+                static_plot_path = os.path.join(TEMP_PLOT_DIR, f"hbarplot_{uuid.uuid4().hex}.png")
+                plt.savefig(static_plot_path)
+                plt.close()
+
+                base64_img = encode_image_to_base64(static_plot_path)
+                return {
+                    "type": "static_base64",
+                    "image": base64_img,
+                    "format": "png",
+                    "message": f"✅ Horizontal Bar Plot of `{cols[0]}` by `{cols[1]}`"
+                }
+            else:
+                return "❓ Horizontal bar plot requires a categorical column."
+
         elif "pairplot" in input_lower:
             pairplot_fig = sns.pairplot(df.select_dtypes(include='number'))
             static_plot_path = os.path.join(TEMP_PLOT_DIR, f"pairplot_{uuid.uuid4().hex}.png")
