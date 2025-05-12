@@ -1,0 +1,12 @@
+streamlit
+pandas
+numpy
+matplotlib
+seaborn
+scipy
+scikit-learn
+plotly
+google-generativeai
+requests
+uuid
+plotly==5.10.0
