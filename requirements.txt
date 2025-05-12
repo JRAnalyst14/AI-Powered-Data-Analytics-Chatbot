@@ -1,6 +1,6 @@
 streamlit
 pandas
-numpy
+numpy==1.23.5
 matplotlib
 seaborn
 scipy
@@ -9,4 +9,4 @@ plotly
 google-generativeai
 requests
 uuid
-plotly==5.10.0
+plotly==5.17.0
