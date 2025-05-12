@@ -10,3 +10,4 @@ google-generativeai
 requests
 uuid
 plotly==5.17.0
+streamlit-option-menu
